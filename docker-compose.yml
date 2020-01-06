@@ -1,0 +1,105 @@
+version: "3.7"
+
+volumes:
+  api-shards-cache: {}
+  api-lib: {}
+  api-bin: {}
+  toolbox-bundle: {}
+  postgres-data: {}
+  postgres-test-data:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+
+networks:
+  development: {}
+  test: {}
+
+x-service-api: &service-api
+  build:
+    context: ./api
+    dockerfile: Dockerfile.development
+  volumes:
+    - ./api:/usr/src/app
+    - api-shards-cache:/root/.cache/shards
+    - api-lib:/usr/src/app/lib
+    - api-bin:/usr/src/app/bin
+
+x-service-toolbox: &service-toolbox
+  build:
+    context: ./toolbox
+    dockerfile: Dockerfile
+  volumes:
+    - ./toolbox:/usr/src/app
+    - toolbox-bundle:/usr/local/bundle
+
+x-service-postgres: &service-postgres
+  image: postgres:12.1-alpine
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: todoapp_cr
+    PGDATA: /var/lib/postgresql/data
+
+services:
+  api:
+    <<: *service-api
+    env_file:
+      - ./api/.env.development
+    command: ["tail", "-f", "/dev/null"]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    networks:
+      - development
+    labels:
+      todoapp-api-cr.service: api
+
+  toolbox:
+    <<: *service-toolbox
+    environment:
+      TOOLBOX_DB_URL: "postgresql://postgres:postgres@postgres:5432/todoapp_cr"
+    networks:
+      - development
+    depends_on:
+      - postgres
+    labels:
+      todoapp-api-cr.service: toolbox
+
+  postgres:
+    <<: *service-postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - development
+    labels:
+      todoapp-api-cr.service: postgres
+
+  api-test:
+    <<: *service-api
+    env_file:
+      - ./api/.env.test
+    entrypoint: ["crystal", "spec"]
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres-test
+    networks:
+      - test
+    labels:
+      todoapp-api-cr.service: api-test
+
+  postgres-test:
+    <<: *service-postgres
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres-test-data:/var/lib/postgresql/data
+    networks:
+      - test
+    labels:
+      todoapp-api-cr.service: postgres-test
+

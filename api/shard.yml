@@ -1,0 +1,27 @@
+name: todoapp-api-cr
+version: 0.1.0
+
+authors:
+  - Anton Prudkohliad <anton.prudkohliad@gmail.com>
+
+dependencies:
+  clear:
+    github: anykeyh/clear
+    version: 0.7.2
+
+  cors:
+    github: prutya/cors
+    branch: master
+
+  jwt:
+    github: crystal-community/jwt
+    version: 1.4.0
+
+  radix:
+    github: luislavena/radix
+    version: 0.3.9
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: 0.11.0

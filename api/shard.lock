@@ -1,0 +1,50 @@
+version: 1.0
+shards:
+  admiral:
+    github: jwaldrip/admiral.cr
+    commit: d11fc4863154f3dbd933421bdf45d356a2550e07
+
+  ameba:
+    github: crystal-ameba/ameba
+    version: 0.11.0
+
+  bindata:
+    github: spider-gazelle/bindata
+    version: 1.2.0
+
+  clear:
+    github: anykeyh/clear
+    version: 0.7.2
+
+  cors:
+    github: prutya/cors
+    commit: 700582d7c2915f551a08141473eacde98ef5cbee
+
+  db:
+    github: crystal-lang/crystal-db
+    version: 0.8.0
+
+  generate:
+    github: anykeyh/generate.cr
+    commit: 27a59d663ded8ce39a361e3a88b8dd747f59ce42
+
+  inflector:
+    github: phoffer/inflector.cr
+    version: 0.1.8
+
+  jwt:
+    github: crystal-community/jwt
+    version: 1.4.0
+
+  openssl_ext:
+    github: stakach/openssl_ext
+    version: 1.2.0
+
+  pg:
+    github: will/crystal-pg
+    commit: cafebf8ae9477e7e50bd3e1281d66d8a519d645f
+
+  radix:
+    github: luislavena/radix
+    version: 0.3.9
+
