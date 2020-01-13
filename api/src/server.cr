@@ -11,7 +11,7 @@ module App
         Handlers::RequestId.new(@config, @log),
         Handlers::Error.new(@config, @log),
         Handlers::Timing.new(@config, @log),
-        Cors.new(
+        Cors::Handler.new(
           respond_ok: ->(ctx : HTTP::Server::Context) do
             Handlers::Utils.respond(ctx, HTTP::Status::OK); nil
           end,

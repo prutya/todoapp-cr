@@ -18,7 +18,7 @@ shards:
 
   cors:
     github: prutya/cors
-    commit: 700582d7c2915f551a08141473eacde98ef5cbee
+    version: 0.2.0
 
   db:
     github: crystal-lang/crystal-db
