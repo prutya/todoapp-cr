@@ -1,8 +1,5 @@
 module App
   class Logger < ::Logger
-    FORMAT_JSON = "json"
-    FORMAT_NULL = "null"
-
     FORMATTER_JSON =
       ::Logger::Formatter.new do |severity, datetime, _progname, message, io|
         io << {
@@ -15,7 +12,7 @@ module App
 
     def initialize(config : Config)
       common_args = {
-        io: if config.log_format == FORMAT_NULL
+        io: if config.log_format == "null"
               File.open(File::NULL, "w")
             else
               STDOUT
@@ -23,7 +20,7 @@ module App
         level: ::Logger::Severity.parse(config.log_severity)
       }
 
-      if config.log_format == FORMAT_JSON
+      if config.log_format == "json"
         super(**common_args, formatter: FORMATTER_JSON)
       else
         super(**common_args)

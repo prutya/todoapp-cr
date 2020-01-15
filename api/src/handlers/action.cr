@@ -1,16 +1,13 @@
 module App
   module Handlers
     abstract class Action < Base
-      HEADER_AUTHORIZATION = "Authorization"
-      JWT_KEY_USER_ID = "user_id"
-
       def call(ctx : HTTP::Server::Context)
         req_id = ctx.store.id
 
         if skip_auth?
           log.debug("#{req_id}: Skipped authentication")
         else
-          unless jwt = ctx.request.headers[HEADER_AUTHORIZATION]?.as?(String)
+          unless jwt = ctx.request.headers["Authorization"]?.as?(String)
             log.debug("#{req_id}: Authorization header is missing")
 
             return respond(ctx, HTTP::Status::UNAUTHORIZED)
@@ -34,7 +31,7 @@ module App
             return respond(ctx, HTTP::Status::UNAUTHORIZED)
           end
 
-          unless user_id_string = jwt_payload[JWT_KEY_USER_ID]?.as?(JSON::Any).try(&.as_s?)
+          unless user_id_string = jwt_payload["user_id"]?.as?(JSON::Any).try(&.as_s?)
             log.debug("#{req_id}: user_id key is missing")
 
             return respond(ctx, HTTP::Status::UNAUTHORIZED)
