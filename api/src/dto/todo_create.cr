@@ -1,6 +1,6 @@
 module App
   module Dto
-    struct TodoCreate
+    struct TodoCreate < Base
       JSON.mapping(
         {
           body: String

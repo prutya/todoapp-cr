@@ -37,7 +37,10 @@ module App
         ctx.response.close
       end
 
-      def json_body_as?(ctx : HTTP::Server::Context, klass)
+      def json_body_as?(
+        ctx : HTTP::Server::Context,
+        dto_class : App::Dto::Base.class
+      )
         unless ctx.request.body
           respond(ctx, HTTP::Status::BAD_REQUEST)
 
@@ -50,7 +53,7 @@ module App
           return nil
         end
 
-        klass.from_json(ctx.request.body.not_nil!.gets_to_end)
+        dto_class.from_json(ctx.request.body.not_nil!.gets_to_end)
       rescue e : JSON::ParseException
         respond(ctx, HTTP::Status::BAD_REQUEST)
 

@@ -1,6 +1,6 @@
 module App
   module Dto
-    struct UserCreate
+    struct UserCreate < Base
       JSON.mapping(
         {
           login: String,
