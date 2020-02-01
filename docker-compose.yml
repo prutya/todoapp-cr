@@ -56,6 +56,24 @@ services:
     labels:
       todoapp-api-cr.service: api
 
+  hasura:
+    image: hasura/graphql-engine:v1.0.0
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgresql://postgres:postgres@postgres:5432/todoapp_cr
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+    ports:
+      - "4000:8080"
+    depends_on:
+      - postgres
+    networks:
+      - development
+    labels:
+      todoapp-api-cr.service: hasura
+
   toolbox:
     <<: *service-toolbox
     environment:
